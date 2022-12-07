@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 Form scherm = new Form();
 scherm.Text = "MandelBrotC";
-scherm.BackColor = Color.Gray;
+scherm.BackColor = Color.LightPink;
 scherm.ClientSize = new Size(600, 600);
 
 // met een Bitmap kun je een plaatje opslaan in het geheugen
@@ -70,22 +70,22 @@ scherm.Controls.Add(knop);
 knop.Location = new Point(230, 540);
 knop.Text = "Go!!!";
 knop.Size = new Size(40, 25);
-// de code
-PointF newMandelPunt(float a, float b, float x, float y)
-{
-    return new PointF(a * a - b * b + x, 2 * a * b + y); 
-}
 
-double Afstand(PointF punt_x, PointF punt_y)  // punt_x = mandelPunt and punt_y = beginpunt
-{
-    double p1X = Convert.ToDouble(punt_x.X);
-    double p1Y = Convert.ToDouble(punt_x.Y);
-    double p2X = Convert.ToDouble(punt_y.X);
-    double p2Y = Convert.ToDouble(punt_y.Y);
-    double dX = Math.Pow((p1X - p2X), 2);
-    double dY = Math.Pow((p1Y - p2Y), 2);
-    return Math.Sqrt(dX + dY);
-}
+// button voor voorbeeld 1 
+Button voorbeeld1 = new Button();
+scherm.Controls.Add(voorbeeld1);
+voorbeeld1.Location = new Point(270, 540);
+voorbeeld1.Text = "Voorbeeld 1";
+voorbeeld1.Size = new Size(90, 25);
+
+
+// de code
+// PointF newMandelPunt(float a, float b, float x, float y)
+//{
+//   return new PointF(a * a - b * b + x, 2 * a * b + y); 
+//}
+
+
 // maak een formule om elk pixel af te gaan en de waarde van a en b te berekenen 
 /// we moeten een for loop voor x en y maken die dan in de mandel number functie komen 
 /// dit doen we door de startpunt 0, max 400 (want 0-399 pixels is 400) en dan x++ zeg maar ;D
@@ -96,18 +96,22 @@ void pixelfinder() // wellicht nog een variabele maken voor de bitmap grote als 
     {
         for (int pixel_y = 0; pixel_y<400; pixel_y++)
         {
-            float newSchaal = float.Parse(invoer_schaal.Text);
-            float x = pixel_x * newSchaal - 2; // calculates the x-coordinate belonging to the pixel
-            float y = pixel_y * -newSchaal + 2; // calculates the y-coordinate belonging to the pixel
+            double newSchaal = double.Parse(invoer_schaal.Text);
+            double newMiddenX = double.Parse(invoer_x.Text);
+            double newMiddenY = double.Parse(invoer_y.Text);
             int maxCount2 = int.Parse(invoer_maxaantal.Text);
+
+            double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal); // calculates the x-coordinate belonging to the pixel
+            double y = newMiddenY + (((400/2) - pixel_y) * newSchaal); // calculates the y-coordinate belonging to the pixel
+         
             int mandelgetal = newMandelnumber(x, y);
              
             if (mandelgetal % 2 == 0)
                 plaatje.SetPixel(pixel_x, pixel_y, Color.Black);
-            else if (mandelgetal % 2 != 0)
+            else
                 plaatje.SetPixel(pixel_x, pixel_y, Color.White);
-            else if (mandelgetal == maxCount2) // for when the mandelgetal is infinite (aka pythagoras not larger than 2)
-                plaatje.SetPixel(pixel_x, pixel_y, Color.Black);
+           // else if (mandelgetal < 2) // for when the mandelgetal is infinite (aka pythagoras not larger than 2)
+               //plaatje.SetPixel(pixel_x, pixel_y, Color.Black);
             
             
             // add an if else for when mandelgetal is infinite
@@ -115,22 +119,28 @@ void pixelfinder() // wellicht nog een variabele maken voor de bitmap grote als 
     }
 }
 
-int newMandelnumber(float x, float y)
+int newMandelnumber(double x, double y)
 {
-    float a = 0f;
-    float b = 0f;
+    double a = 0;
+    double b = 0;
+    double a_tijdelijk = 0;
     int count = 0;
     int maxCount = int.Parse(invoer_maxaantal.Text);
-    PointF beginpunt = new PointF(x, y);
     double pythagoras = 0;
 
-    while (count < maxCount && pythagoras < 2)
+    while (count < maxCount && pythagoras < 4)
     {
-        PointF mandelPunt = newMandelPunt(a, b, x, y);
-        pythagoras = Afstand(mandelPunt, beginpunt);
-        a = mandelPunt.X;
-        b = mandelPunt.Y;
+        a_tijdelijk = a * a - b * b + x;
+        b = 2 * a * b + y;
+        a = a_tijdelijk;
+        pythagoras = a * a + b * b;
         count++; 
+
+        // if (count > maxCount)
+        //{
+        //    count = maxCount;
+         //   return count;
+        //}
     }
     return count;
 }
@@ -141,9 +151,36 @@ void genereer(object o, EventArgs e)
     afbeelding.Invalidate();
 }
 
+void voorbeeld_one(object o, EventArgs e)
+{
+    invoer_schaal.Text = "0,01"; // sets the text in the textbox to a hardcoded value for an example.
+    invoer_x.Text = "0";
+    invoer_y.Text = "0";
+    invoer_maxaantal.Text = "100";
+    genereer(o, e);
+}
+
+void SchermClick(object sender, MouseEventArgs mea)
+{
+    double newSchaal = double.Parse(invoer_schaal.Text) * 0.80;
+    int pixel_x = mea.X;
+    int pixel_y = mea.Y;
+    double newinvoer_x = ((pixel_x - (400 / 2)) * newSchaal); 
+    double newinvoer_y = (((400 / 2) - pixel_y) * newSchaal);
+
+    invoer_x.Text = newinvoer_x.ToString();
+    invoer_y.Text = newinvoer_y.ToString();
+    invoer_schaal.Text = newSchaal.ToString();
+    
+
+    afbeelding.Invalidate();
+    pixelfinder();
+}
+
+// all click actions
+afbeelding.MouseClick += SchermClick;
 knop.Click += genereer;
-
-
+voorbeeld1.Click += voorbeeld_one;
 
 // DIT IS HET EINDE
 Application.Run(scherm);
