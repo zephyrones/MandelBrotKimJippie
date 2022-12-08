@@ -1,3 +1,5 @@
+// Jip Heimeriks and Kim Nieuwets
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -6,7 +8,7 @@ using System.Windows.Forms;
 Form scherm = new Form();
 scherm.Text = "Mandelbrot Generator!";
 scherm.BackColor = Color.LightPink;
-scherm.ClientSize = new Size(600, 600);
+scherm.ClientSize = new Size(650, 650);
 
 // using a bitmap to save an image in the memory
 Bitmap plaatje = new Bitmap(400, 400);
@@ -19,7 +21,7 @@ afbeelding.Size = new Size(400, 400);
 afbeelding.BackColor = Color.White;
 afbeelding.Image = plaatje;
 
-// label voor de invoer en tekstbox van x.
+// label and textbox for x-value.
 Label midden_x = new Label();
 TextBox invoer_x = new TextBox();
 scherm.Controls.Add(midden_x);
@@ -31,7 +33,7 @@ midden_x.Size = new Size(60, 20);
 invoer_x.Size = new Size(140, 20);
 
 
-// label voor de invoer en tekstbox van y.
+// label and textbox for y-value.
 Label midden_y = new Label();
 TextBox invoer_y = new TextBox();
 scherm.Controls.Add(midden_y);
@@ -42,7 +44,7 @@ midden_y.Text = "Midden y:";
 midden_y.Size = new Size(60, 20);
 invoer_y.Size = new Size(140, 20);
 
-// label voor de invoer en tekstbox van schaal
+// label and textbox for schaal.
 Label schaal = new Label();
 TextBox invoer_schaal = new TextBox();
 scherm.Controls.Add(schaal);
@@ -53,7 +55,7 @@ schaal.Text = "Schaal:";
 schaal.Size = new Size(60, 20);
 invoer_schaal.Size = new Size(140, 20);
 
-// label voor de invoer en tekstbox van max aantal
+// label en textbox for max aantal.
 Label maxaantal = new Label();
 TextBox invoer_maxaantal = new TextBox();
 scherm.Controls.Add(maxaantal);
@@ -113,16 +115,16 @@ voorbeeld4.Location = new Point(250, 510);
 voorbeeld4.Text = "Voorbeeld 4";
 voorbeeld4.Size = new Size(90, 25);
 
-// trackbars voor Color
-TrackBar schuif = new TrackBar();
+// trackbars for color
+TrackBar schuif = new TrackBar(); // connected to green value
 scherm.Controls.Add(schuif);
 schuif.Location = new Point(130, 540);
 schuif.Size = new Size(200, 20);
 schuif.Minimum = 0;
-schuif.Maximum = 85;
+schuif.Maximum = 255;
 schuif.Orientation= Orientation.Horizontal;
 
-TrackBar schuif2 = new TrackBar();
+TrackBar schuif2 = new TrackBar(); // connected to blue value
 scherm.Controls.Add(schuif2);
 schuif2.Location = new Point(130, 580);
 schuif2.Size = new Size(200, 20);
@@ -141,7 +143,7 @@ pixelfinder();
 
 void pixelfinder()  
 {
-    for (int pixel_x = 0; pixel_x<400; pixel_x++)
+    for (int pixel_x = 0; pixel_x<400; pixel_x++) // runs through all x and y pixels to calculate the x and y coords.
     {
         for (int pixel_y = 0; pixel_y<400; pixel_y++)
         {
@@ -149,7 +151,7 @@ void pixelfinder()
             double newSchaal = double.Parse(invoer_schaal.Text);
             double newMiddenX = double.Parse(invoer_x.Text);
             double newMiddenY = double.Parse(invoer_y.Text);
-            int maxCount2 = int.Parse(invoer_maxaantal.Text);
+            int maxCount = int.Parse(invoer_maxaantal.Text);
 
             double x = coordinaatx(newMiddenX, pixel_x, newSchaal);
             double y = coordinaaty(newMiddenY, pixel_y, newSchaal);
@@ -158,12 +160,13 @@ void pixelfinder()
          
             int mandelgetal = newMandelnumber(x, y);
 
-            int rood = (255 * mandelgetal / maxCount2);
+            int rood = (255 * mandelgetal / maxCount);
             int groen = schuif.Value;
 
             if (mandelgetal % 2 == 0)
             { // the starting point for each if-else statement is different and falls between 0-255.
-              // the trackbar has a min = 0 and max = 85.
+              // the trackbar has a min = 0 and max = 85. this is to determine the blue value based on 
+              // the mandelnumber.
               
                 int blauw = 85 + schuif2.Value;
                 plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
@@ -211,6 +214,7 @@ int newMandelnumber(double x, double y)
     return count;
 }
 
+// functions that calculate the x and y coordinate based on the pixel.
 double coordinaatx(double newMiddenX, double pixel_x, double newSchaal)
 {
     double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal);
@@ -222,6 +226,8 @@ double coordinaaty(double newMiddenY, double pixel_y, double newSchaal)
     double y = newMiddenY + (((400 / 2) - pixel_y) * newSchaal);
     return y;
 }
+
+// function that generates the image
 void genereer(object o, EventArgs e)
 {
     pixelfinder();
@@ -268,18 +274,15 @@ void SchermClick(object sender, MouseEventArgs mea)
 {
     if (mea.Button == MouseButtons.Left)
     {
-        double newSchaal = double.Parse(invoer_schaal.Text) * 0.5;
+        double newSchaal = double.Parse(invoer_schaal.Text) * 0.7;
         double middenX = double.Parse(invoer_x.Text);
         double middenY = double.Parse(invoer_y.Text);
 
-        int pixel_x = mea.X;
+        int pixel_x = mea.Location.X;
         int pixel_y = mea.Y;
 
         double newinvoer_x = coordinaatx(middenX, pixel_x, newSchaal);
-        double newinvoer_y = coordinaaty(middenY, pixel_y, newSchaal);
-        // double newinvoer_x = middenX + (pixel_x - (400 / 2)) * newSchaal; // i dont think this is fully correct yet but issa start
-        // double newinvoer_y = middenY + ((400 / 2) - pixel_y) * newSchaal;
-        
+        double newinvoer_y = coordinaaty(middenY, pixel_y, newSchaal);      
 
         invoer_x.Text = newinvoer_x.ToString();
         invoer_y.Text = newinvoer_y.ToString();
@@ -287,7 +290,6 @@ void SchermClick(object sender, MouseEventArgs mea)
 
         afbeelding.Invalidate();
         pixelfinder();
-        afbeelding.Invalidate();
     }
     else if (mea.Button == MouseButtons.Right)
     {
@@ -297,8 +299,8 @@ void SchermClick(object sender, MouseEventArgs mea)
 
         int pixel_x = mea.X;
         int pixel_y = mea.Y;
-        double newinvoer_x = middenX + (pixel_x - (400 / 2)) * newSchaal; // i dont think this is fully correct yet but issa start
-        double newinvoer_y = middenY + ((400 / 2) - pixel_y) * newSchaal;
+        double newinvoer_x = coordinaatx(middenX, pixel_x, newSchaal);
+        double newinvoer_y = coordinaaty(middenY, pixel_y, newSchaal);
         double temp_newinvoer_x = newinvoer_x;
         double temp_newinvoer_y = newinvoer_y;
 
@@ -308,7 +310,6 @@ void SchermClick(object sender, MouseEventArgs mea)
 
         afbeelding.Invalidate();
         pixelfinder();
-        afbeelding.Invalidate();
     }
 }
 
@@ -324,7 +325,7 @@ void VeranderSchuif2(object o, EventArgs ea)
     afbeelding.Invalidate();
 }
 
-// all click actions
+// all actions
 afbeelding.MouseClick += SchermClick;
 knop.Click += genereer;
 voorbeeld1.Click += voorbeeld_one;
@@ -334,7 +335,6 @@ voorbeeld4.Click += voorbeeld_four;
 schuif.Scroll += VeranderSchuif;
 schuif2.Scroll += VeranderSchuif2;
 
-// DIT IS HET EINDE
 Application.Run(scherm);
 
 
