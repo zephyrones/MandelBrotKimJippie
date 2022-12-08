@@ -278,7 +278,7 @@ void SchermClick(object sender, MouseEventArgs mea)
         double middenX = double.Parse(invoer_x.Text);
         double middenY = double.Parse(invoer_y.Text);
 
-        int pixel_x = mea.Location.X;
+        int pixel_x = mea.X;
         int pixel_y = mea.Y;
 
         double newinvoer_x = coordinaatx(middenX, pixel_x, newSchaal);
