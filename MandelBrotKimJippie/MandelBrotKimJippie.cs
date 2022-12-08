@@ -4,7 +4,6 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-
 Form scherm = new Form();
 scherm.Text = "Mandelbrot Generator!";
 scherm.BackColor = Color.LightPink;
@@ -134,7 +133,7 @@ schuif2.Orientation = Orientation.Horizontal;
 
 
 
-// startvalues voor de textboxes
+// start values for the textboxes to generate the 'standard' mandelbrot.
 invoer_schaal.Text = "0,01"; 
 invoer_x.Text = "0";
 invoer_y.Text = "0";
@@ -155,9 +154,7 @@ void pixelfinder()
 
             double x = coordinaatx(newMiddenX, pixel_x, newSchaal);
             double y = coordinaaty(newMiddenY, pixel_y, newSchaal);
-           // double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal); // calculates the x-coordinate belonging to the pixel
-           // double y = newMiddenY + (((400/2) - pixel_y) * newSchaal); // calculates the y-coordinate belonging to the pixel
-         
+
             int mandelgetal = newMandelnumber(x, y);
 
             int rood = (255 * mandelgetal / maxCount);
@@ -274,7 +271,7 @@ void SchermClick(object sender, MouseEventArgs mea)
 {
     if (mea.Button == MouseButtons.Left)
     {
-        double newSchaal = double.Parse(invoer_schaal.Text) * 0.7;
+        double newSchaal = double.Parse(invoer_schaal.Text) * 0.7; // the zoom factor is 0.7
         double middenX = double.Parse(invoer_x.Text);
         double middenY = double.Parse(invoer_y.Text);
 
@@ -293,7 +290,7 @@ void SchermClick(object sender, MouseEventArgs mea)
     }
     else if (mea.Button == MouseButtons.Right)
     {
-        double newSchaal = double.Parse(invoer_schaal.Text) / 0.7;
+        double newSchaal = double.Parse(invoer_schaal.Text) / 0.7; // the zoom out factor is 0.7
         double middenX = double.Parse(invoer_x.Text);
         double middenY = double.Parse(invoer_y.Text);
 
