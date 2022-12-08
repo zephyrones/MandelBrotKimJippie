@@ -217,13 +217,13 @@ int newMandelnumber(double x, double y)
 // functions that calculate the x and y coordinate based on the pixel.
 double coordinaatx(double newMiddenX, double pixel_x, double newSchaal)
 {
-    double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal);
+    double x = newMiddenX + ((pixel_x - 200) * newSchaal);
     return x;
 }
 
 double coordinaaty(double newMiddenY, double pixel_y, double newSchaal)
 {
-    double y = newMiddenY + (((400 / 2) - pixel_y) * newSchaal);
+    double y = newMiddenY + ((200- pixel_y) * newSchaal);
     return y;
 }
 
