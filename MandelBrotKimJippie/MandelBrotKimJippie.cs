@@ -139,15 +139,13 @@ invoer_y.Text = "0";
 invoer_schaal.Text = "0,01";
 invoer_maxaantal.Text = "100";
 pixelfinder();
-// checks if it is a double
-
 
 // checks if the textboxes are empty to avoid a crash 
 void textchecker()
 {  
     string message = "Dit is geen geldige input. Vul een getal in elk veld in.";
     var Tempinvoer_x = invoer_x.Text;
-    bool invoer_x_num = double.TryParse(Tempinvoer_x, out var num);
+    bool invoer_x_num = double.TryParse(Tempinvoer_x, out var num); // checks if it is a number and returns false if not
     var Tempinvoer_y = invoer_y.Text;
     bool invoer_y_num = double.TryParse(Tempinvoer_y, out var num2);
     var Tempinvoer_schaal = invoer_schaal.Text;
@@ -156,7 +154,7 @@ void textchecker()
     bool invoer_maxaantal_num = double.TryParse(Tempinvoer_x, out var num4);
 
 
-
+    // checks for all possible incorrect inputs and resets the values so the user can fill them in correctly.
     if (string.IsNullOrEmpty(invoer_x.Text) || string.IsNullOrEmpty(invoer_y.Text) ||
         string.IsNullOrEmpty(invoer_x.Text) || string.IsNullOrEmpty(invoer_maxaantal.Text)
         || invoer_x_num == false || invoer_y_num == false || invoer_schaal_num == false || invoer_maxaantal_num == false)
