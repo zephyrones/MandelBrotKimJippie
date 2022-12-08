@@ -8,13 +8,12 @@ scherm.Text = "Mandelbrot Generator!";
 scherm.BackColor = Color.LightPink;
 scherm.ClientSize = new Size(600, 600);
 
-// met een Bitmap kun je een plaatje opslaan in het geheugen
+// using a bitmap to save an image in the memory
 Bitmap plaatje = new Bitmap(400, 400);
 
-// een Label kan ook gebruikt worden om een Bitmap te laten zien
+// use a label to show a bitmap on screen
 Label afbeelding = new Label();
 scherm.Controls.Add(afbeelding);
-// locatie van bitmap aanpassen
 afbeelding.Location = new Point(10, 10);
 afbeelding.Size = new Size(400, 400);
 afbeelding.BackColor = Color.White;
@@ -27,7 +26,7 @@ scherm.Controls.Add(midden_x);
 scherm.Controls.Add(invoer_x);
 midden_x.Location = new Point(10, 420);
 invoer_x.Location = new Point(90, 420);
-midden_x.Text = "midden x:";
+midden_x.Text = "Midden x:";
 midden_x.Size = new Size(60, 20);
 invoer_x.Size = new Size(140, 20);
 
@@ -39,7 +38,7 @@ scherm.Controls.Add(midden_y);
 scherm.Controls.Add(invoer_y);
 midden_y.Location = new Point(10, 450);
 invoer_y.Location = new Point(90, 450);
-midden_y.Text = "midden y:";
+midden_y.Text = "Midden y:";
 midden_y.Size = new Size(60, 20);
 invoer_y.Size = new Size(140, 20);
 
@@ -50,7 +49,7 @@ scherm.Controls.Add(schaal);
 scherm.Controls.Add(invoer_schaal);
 schaal.Location = new Point(10, 480);
 invoer_schaal.Location = new Point(90, 480);
-schaal.Text = "schaal:";
+schaal.Text = "Schaal:";
 schaal.Size = new Size(60, 20);
 invoer_schaal.Size = new Size(140, 20);
 
@@ -61,11 +60,22 @@ scherm.Controls.Add(maxaantal);
 scherm.Controls.Add(invoer_maxaantal);
 maxaantal.Location = new Point(10, 510);
 invoer_maxaantal.Location = new Point(90, 510);
-maxaantal.Text = "max aantal:";
-maxaantal.Size = new Size(60, 20);
+maxaantal.Text = "Max aantal:";
+maxaantal.Size = new Size(75, 20);
 invoer_maxaantal.Size = new Size(40, 20);
 
 // Label voor Trackbars
+Label trackbar = new Label();
+scherm.Controls.Add(trackbar);
+trackbar.Location = new Point(10, 540);
+trackbar.Size = new Size(120, 20);
+trackbar.Text = "Waarde kleur groen: ";
+
+Label trackbar2 = new Label();
+scherm.Controls.Add(trackbar2);
+trackbar2.Location = new Point(10, 580);
+trackbar2.Size = new Size(120, 20);
+trackbar2.Text = "Waarde kleur blauw: ";
 
 
 // button voor het genereren
@@ -106,19 +116,19 @@ voorbeeld4.Size = new Size(90, 25);
 // trackbars voor Color
 TrackBar schuif = new TrackBar();
 scherm.Controls.Add(schuif);
-schuif.Location = new Point(430, 20);
-schuif.Size = new Size(20, 200);
+schuif.Location = new Point(130, 540);
+schuif.Size = new Size(200, 20);
 schuif.Minimum = 0;
 schuif.Maximum = 85;
-schuif.Orientation= Orientation.Vertical;
+schuif.Orientation= Orientation.Horizontal;
 
 TrackBar schuif2 = new TrackBar();
 scherm.Controls.Add(schuif2);
-schuif2.Location = new Point(480, 20);
-schuif2.Size = new Size(20, 200);
+schuif2.Location = new Point(130, 580);
+schuif2.Size = new Size(200, 20);
 schuif2.Minimum = 0;
 schuif2.Maximum = 85;
-schuif2.Orientation = Orientation.Vertical;
+schuif2.Orientation = Orientation.Horizontal;
 
 
 
