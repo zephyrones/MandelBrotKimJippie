@@ -151,8 +151,10 @@ void pixelfinder()
             double newMiddenY = double.Parse(invoer_y.Text);
             int maxCount2 = int.Parse(invoer_maxaantal.Text);
 
-            double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal); // calculates the x-coordinate belonging to the pixel
-            double y = newMiddenY + (((400/2) - pixel_y) * newSchaal); // calculates the y-coordinate belonging to the pixel
+            double x = coordinaatx(newMiddenX, pixel_x, newSchaal);
+            double y = coordinaaty(newMiddenY, pixel_y, newSchaal);
+           // double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal); // calculates the x-coordinate belonging to the pixel
+           // double y = newMiddenY + (((400/2) - pixel_y) * newSchaal); // calculates the y-coordinate belonging to the pixel
          
             int mandelgetal = newMandelnumber(x, y);
 
@@ -209,6 +211,17 @@ int newMandelnumber(double x, double y)
     return count;
 }
 
+double coordinaatx(double newMiddenX, double pixel_x, double newSchaal)
+{
+    double x = newMiddenX + ((pixel_x - (400 / 2)) * newSchaal);
+    return x;
+}
+
+double coordinaaty(double newMiddenY, double pixel_y, double newSchaal)
+{
+    double y = newMiddenY + (((400 / 2) - pixel_y) * newSchaal);
+    return y;
+}
 void genereer(object o, EventArgs e)
 {
     pixelfinder();
@@ -255,15 +268,17 @@ void SchermClick(object sender, MouseEventArgs mea)
 {
     if (mea.Button == MouseButtons.Left)
     {
-        double newSchaal = double.Parse(invoer_schaal.Text) * 0.7;
+        double newSchaal = double.Parse(invoer_schaal.Text) * 0.5;
         double middenX = double.Parse(invoer_x.Text);
         double middenY = double.Parse(invoer_y.Text);
 
         int pixel_x = mea.X;
         int pixel_y = mea.Y;
 
-        double newinvoer_x = middenX + (pixel_x - (400 / 2)) * newSchaal; // i dont think this is fully correct yet but issa start
-        double newinvoer_y = middenY + ((400 / 2) - pixel_y) * newSchaal;
+        double newinvoer_x = coordinaatx(middenX, pixel_x, newSchaal);
+        double newinvoer_y = coordinaaty(middenY, pixel_y, newSchaal);
+        // double newinvoer_x = middenX + (pixel_x - (400 / 2)) * newSchaal; // i dont think this is fully correct yet but issa start
+        // double newinvoer_y = middenY + ((400 / 2) - pixel_y) * newSchaal;
         
 
         invoer_x.Text = newinvoer_x.ToString();
