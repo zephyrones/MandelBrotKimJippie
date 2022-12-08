@@ -298,11 +298,9 @@ void SchermClick(object sender, MouseEventArgs mea)
         int pixel_y = mea.Y;
         double newinvoer_x = coordinaatx(middenX, pixel_x, newSchaal);
         double newinvoer_y = coordinaaty(middenY, pixel_y, newSchaal);
-        double temp_newinvoer_x = newinvoer_x;
-        double temp_newinvoer_y = newinvoer_y;
 
-        invoer_x.Text = temp_newinvoer_x.ToString();
-        invoer_y.Text = temp_newinvoer_y.ToString();
+        invoer_x.Text = newinvoer_x.ToString();
+        invoer_y.Text = newinvoer_y.ToString();
         invoer_schaal.Text = newSchaal.ToString();
 
         afbeelding.Invalidate();
