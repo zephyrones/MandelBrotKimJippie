@@ -134,102 +134,134 @@ schuif2.Orientation = Orientation.Horizontal;
 
 
 // start values for the textboxes to generate the 'standard' mandelbrot.
-invoer_schaal.Text = "0,01"; 
 invoer_x.Text = "0";
 invoer_y.Text = "0";
+invoer_schaal.Text = "0,01";
 invoer_maxaantal.Text = "100";
 pixelfinder();
+// checks if it is a double
 
-void pixelfinder()  
-{
-    for (int pixel_x = 0; pixel_x<400; pixel_x++) // runs through all x and y pixels to calculate the x and y coords.
+
+// checks if the textboxes are empty to avoid a crash 
+void textchecker()
+{  
+    string message = "Dit is geen geldige input. Vul een getal in elk veld in.";
+    var Tempinvoer_x = invoer_x.Text;
+    bool invoer_x_num = double.TryParse(Tempinvoer_x, out var num);
+    var Tempinvoer_y = invoer_y.Text;
+    bool invoer_y_num = double.TryParse(Tempinvoer_y, out var num2);
+    var Tempinvoer_schaal = invoer_schaal.Text;
+    bool invoer_schaal_num = double.TryParse(Tempinvoer_schaal, out var num3);
+    var Tempinvoer_maxaantal = invoer_maxaantal.Text;
+    bool invoer_maxaantal_num = double.TryParse(Tempinvoer_x, out var num4);
+
+
+
+    if (string.IsNullOrEmpty(invoer_x.Text) || string.IsNullOrEmpty(invoer_y.Text) ||
+        string.IsNullOrEmpty(invoer_x.Text) || string.IsNullOrEmpty(invoer_maxaantal.Text)
+        || invoer_x_num == false || invoer_y_num == false || invoer_schaal_num == false || invoer_maxaantal_num == false)
     {
-        for (int pixel_y = 0; pixel_y<400; pixel_y++)
+        MessageBox.Show(message);
+        invoer_x.Text = "0";
+        invoer_y.Text= "0";
+        invoer_schaal.Text = "0";
+        invoer_maxaantal.Text = "1";
+    }
+    
+}
+    void pixelfinder()
+    {
+        for (int pixel_x = 0; pixel_x < 400; pixel_x++) // runs through all x and y pixels to calculate the x and y coords.
         {
-
-            double newSchaal = double.Parse(invoer_schaal.Text);
-            double newMiddenX = double.Parse(invoer_x.Text);
-            double newMiddenY = double.Parse(invoer_y.Text);
-            int maxCount = int.Parse(invoer_maxaantal.Text);
-
-            double x = coordinaatx(newMiddenX, pixel_x, newSchaal);
-            double y = coordinaaty(newMiddenY, pixel_y, newSchaal);
-
-            int mandelgetal = newMandelnumber(x, y);
-
-            int rood = (255 * mandelgetal / maxCount);
-            int groen = schuif.Value;
-
-            if (mandelgetal % 2 == 0)
-            { // the starting point for each if-else statement is different and falls between 0-255.
-              // the trackbar has a min = 0 and max = 85. this is to determine the blue value based on 
-              // the mandelnumber.
-              
-                int blauw = 85 + schuif2.Value;
-                plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
-            }
-            else if (mandelgetal % 3 == 0)
+            for (int pixel_y = 0; pixel_y < 400; pixel_y++)
             {
-               
-                int blauw = 170 + schuif2.Value;
-                plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
-            }
-            else
-            {
-               
-                int blauw = schuif2.Value;
-                plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
+
+                double newSchaal = double.Parse(invoer_schaal.Text);
+                double newMiddenX = double.Parse(invoer_x.Text);
+                double newMiddenY = double.Parse(invoer_y.Text);
+                int maxCount = int.Parse(invoer_maxaantal.Text);
+
+                double x = coordinaatx(newMiddenX, pixel_x, newSchaal);
+                double y = coordinaaty(newMiddenY, pixel_y, newSchaal);
+
+                int mandelgetal = newMandelnumber(x, y);
+
+                int rood = (255 * mandelgetal / maxCount);
+                int groen = schuif.Value;
+
+                if (mandelgetal % 2 == 0)
+                { // the starting point for each if-else statement is different and falls between 0-255.
+                  // the trackbar has a min = 0 and max = 85. this is to determine the blue value based on 
+                  // the mandelnumber.
+
+                    int blauw = 85 + schuif2.Value;
+                    plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
+                }
+                else if (mandelgetal % 3 == 0)
+                {
+
+                    int blauw = 170 + schuif2.Value;
+                    plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
+                }
+                else
+                {
+
+                    int blauw = schuif2.Value;
+                    plaatje.SetPixel(pixel_x, pixel_y, Color.FromArgb(rood, groen, blauw));
+                }
             }
         }
     }
-}
-
 
 int newMandelnumber(double x, double y)
-{
-    double a = 0;
-    double b = 0;
-    double a_tijdelijk = 0;
-    int count = 0;
-    int maxCount = int.Parse(invoer_maxaantal.Text);
-    double pythagoras = 0;
-
-    while (count < maxCount && pythagoras < 4)
     {
-        a_tijdelijk = a * a - b * b + x;
-        b = 2 * a * b + y;
-        a = a_tijdelijk;
-        pythagoras = a * a + b * b;
-        count++; 
+        double a = 0;
+        double b = 0;
+        double a_tijdelijk = 0;
+        int count = 0;
+        int maxCount = int.Parse(invoer_maxaantal.Text);
+        double pythagoras = 0;
 
-        if (count > maxCount)
+        while (count < maxCount && pythagoras < 4)
         {
-        count = maxCount;
-        return count;
+            a_tijdelijk = a * a - b * b + x;
+            b = 2 * a * b + y;
+            a = a_tijdelijk;
+            pythagoras = a * a + b * b;
+            count++;
+
+            if (count > maxCount)
+            {
+                count = maxCount;
+                return count;
+            }
         }
+        return count;
     }
-    return count;
-}
 
-// functions that calculate the x and y coordinate based on the pixel.
-double coordinaatx(double newMiddenX, double pixel_x, double newSchaal)
-{
-    double x = newMiddenX + ((pixel_x - 200) * newSchaal);
-    return x;
-}
+    // functions that calculate the x and y coordinate based on the pixel.
+    double coordinaatx(double newMiddenX, double pixel_x, double newSchaal)
+    {
+        double x = newMiddenX + ((pixel_x - 200) * newSchaal);
+        return x;
+    }
 
-double coordinaaty(double newMiddenY, double pixel_y, double newSchaal)
-{
-    double y = newMiddenY + ((200- pixel_y) * newSchaal);
-    return y;
-}
+    double coordinaaty(double newMiddenY, double pixel_y, double newSchaal)
+    {
+        double y = newMiddenY + ((200 - pixel_y) * newSchaal);
+        return y;
+    }
 
 // function that generates the image
 void genereer(object o, EventArgs e)
 {
+    textchecker();
     pixelfinder();
     afbeelding.Invalidate();
 }
+    
+   
+
 
 void voorbeeld_one(object o, EventArgs e)
 {
@@ -319,6 +351,7 @@ void VeranderSchuif2(object o, EventArgs ea)
     pixelfinder();
     afbeelding.Invalidate();
 }
+
 
 // all actions
 afbeelding.MouseClick += SchermClick;
